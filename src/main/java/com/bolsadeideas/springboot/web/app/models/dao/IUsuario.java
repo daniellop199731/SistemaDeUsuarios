@@ -8,14 +8,19 @@ public interface IUsuario {
 	
 	public List<Usuario> findAll();
 	
-	public void save(Usuario usuario);
-	
-	public Usuario findOneById(Long id);
-	
 	public List<Usuario> findByCedula(String cedula);
 	
-	public List<Usuario> findByCorreo(String Correo);
+	public List<Usuario> findByCorreo(String correo);	
+	
+	public boolean valUsuarioRepiteCorreo(String correo, Long id);
+	
+	public boolean valUsuarioRepiteCedula(String cedula, Long id);
+		
+	public Usuario findOneById(Long id);
+		
+	public void save(Usuario usuario);
 	
 	public void delete(Long id);
+	
 		
 }

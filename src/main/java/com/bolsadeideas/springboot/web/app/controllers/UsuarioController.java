@@ -1,6 +1,5 @@
 package com.bolsadeideas.springboot.web.app.controllers;
 
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,19 +42,19 @@ public class UsuarioController {
 		//System.out.println(usuarioDAO.findByCedula(usuario.getCedula()));		
 		String strMensaje = null;
 		
-		if(usuarioDAO.findByCorreo(usuario.getCorreo()).size() > 0) {
-			strMensaje = "El correo digitado ya esta registrado";
-			model.addAttribute("titulo", "Formulario de creacion de Usuarios");		
-			model.addAttribute("errorCorreoYaExiste", strMensaje);
-			return "form";
-		}		
-		
-		if(usuarioDAO.findByCedula(usuario.getCedula()).size() > 0) {
+		if(usuarioDAO.valUsuarioRepiteCedula(usuario.getCedula(), usuario.getId())) {
 			strMensaje = "La cedula digitada ya esta registrada";
 			model.addAttribute("titulo", "Formulario de creacion de Usuarios");		
 			model.addAttribute("errorCedulaYaExiste", strMensaje);
 			return "form";
 		}
+		
+		if(usuarioDAO.valUsuarioRepiteCorreo(usuario.getCorreo(), usuario.getId() )) {
+			strMensaje = "El correo digitado ya esta registrado";
+			model.addAttribute("titulo", "Formulario de creacion de Usuarios");		
+			model.addAttribute("errorCorreoYaExiste", strMensaje);
+			return "form";
+		}		
 		
 		if(result.hasErrors()) {
 			model.addAttribute("titulo", "Formulario de creacion de Usuarios");
@@ -75,8 +74,10 @@ public class UsuarioController {
 		} else {
 			return "redirect:/usuarios/listar";
 		}
-		
-		model.addAttribute("usuario", usuario);
+		if (usuario == null) {
+			return "redirect:/usuarios/listar";		
+		}
+		model.addAttribute("usuario", usuario);		
 		model.addAttribute("titulo", "Formulario de creacion de Usuarios");
 		return "form";
 	}	

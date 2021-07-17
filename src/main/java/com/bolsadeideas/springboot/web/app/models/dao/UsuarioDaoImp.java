@@ -59,6 +59,32 @@ public class UsuarioDaoImp implements IUsuario{
 	@ReadOnlyProperty
 	public List<Usuario> findByCorreo(String correo) {
 		return 	em.createQuery("from Usuario where correo = '" + correo + "'").getResultList();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@ReadOnlyProperty
+	@Override
+	public boolean valUsuarioRepiteCedula(String cedula, Long id) {
+		List<Usuario> usuarios = em.createQuery("from Usuario where cedula = '" + cedula + "' AND id <> " + id).getResultList();
+		if(usuarios.size() > 0) {
+			//Significa que alguien mas tiene ese mismo cedula
+			return true;
+		}		
+		//Significa que este id es el unico que tiene este cedula
+		return false;
 	}	
+
+	@SuppressWarnings("unchecked")
+	@ReadOnlyProperty
+	@Override
+	public boolean valUsuarioRepiteCorreo(String correo, Long id) {		
+		List<Usuario> usuarios = em.createQuery("from Usuario where correo = '" + correo + "' AND id <> " + id).getResultList();
+		if(usuarios.size() > 0) {
+			//Significa que alguien mas tiene ese mismo correo
+			return true;
+		}		
+		//Significa que este id es el unico que tiene este correo
+		return false;
+	}
 
 }
